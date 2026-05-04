@@ -44,10 +44,12 @@ async def deductra_ask(request: QueryRequest):
     ##this .chat.completions.create is used because it more universal for other LLM api calls as well
     completion = groq_client.chat.completions.create(
         model="llama-3.3-70b-versatile",
-        message = [
+        messages = [
             {"role" : "system", "content" : SYSTEM_PROMPT},
             {"role" : "user", "content" : prompt}
         ]
-
-
     )
+    return {
+        "answer" : completion.choices[0].message.content,
+        "sources": [{"url": r["url"]} for r in web_results]
+    }
