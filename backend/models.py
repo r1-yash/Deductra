@@ -15,7 +15,7 @@ class User(Base):
     name = Column(String, nullable=True)
 
 class Conversation(Base):
-    __tablename__ = "conversation"
+    __tablename__ = "conversations"
 
     id = Column(UUID(as_uuid=True), primary_key=True,default=uuid.uuid4)
     title = Column(Text, nullable=True)
