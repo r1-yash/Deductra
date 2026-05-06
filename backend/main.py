@@ -11,6 +11,15 @@ import os
 load_dotenv()
 app = FastAPI()
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # initialize tavily client once at startup
 client = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
 
