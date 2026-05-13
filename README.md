@@ -113,7 +113,3 @@ The frontend currently calls `http://localhost:8000` for `sync_user` and `deduct
 - `POST /deductra_ask` — body: `{ "query": "..." }`; returns `{ "answer", "sources" }` where `sources` is a list of `{ "url" }` from Tavily.
 
 The model is instructed to return XML-like tags (`<ANSWER>`, `<question>`); the dashboard parses those for the main reply and follow-up chips.
-
-## License
-
-Add a license file if you intend to open-source this project.
