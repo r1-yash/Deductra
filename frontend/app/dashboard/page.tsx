@@ -6,7 +6,6 @@ import { supabase } from '../lib/supabase'
 function parseResponse(raw: string) {
   const answerMatch = raw.match(/<ANSWER>([\s\S]*?)<\/ANSWER>/)
   const followUpsMatch = [...raw.matchAll(/<question>([\s\S]*?)<\/question>/g)]
-  
   return {
     answer: answerMatch ? answerMatch[1].trim() : raw,
     followUps: followUpsMatch.map(m => m[1].trim())
@@ -24,7 +23,19 @@ export default function Dashboard() {
   useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
       setUser(user)
+
+      // sync user to our users table
+      await fetch('http://localhost:8000/sync_user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: user.id,
+          email: user.email,
+          name: user.user_metadata?.full_name || null
+        })
+      })
     }
     getUser()
   }, [])
@@ -36,6 +47,7 @@ export default function Dashboard() {
     setLoading(true)
     setAnswer('')
     setFollowUps([])
+    setSources([])
     try {
       const res = await fetch('http://localhost:8000/deductra_ask', {
         method: 'POST',
